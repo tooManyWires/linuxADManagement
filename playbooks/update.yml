@@ -1,0 +1,22 @@
+---
+- name: Update-Local
+  hosts: localhost
+  become: yes
+  tasks:
+  - name: update 
+    apt:
+      force_apt_get: True
+      name: "*"
+      state: latest
+      update_cache: yes
+- name: Update-Remote
+  hosts: all
+  become: yes
+  tasks:
+  - name: update
+    apt:
+      force_apt_get: True
+      name: "*"
+      state: latest
+      update_cache: yes
+
