@@ -69,12 +69,6 @@
       command: realm join "{{ domain }}" -U "{{ user }}" --os-name=`uname -o` --os-version=`uname -rsv` --install='/'
       responses:
         Password for *: "{{ password }}"
-  - name: Add linux-admins to sudoers
-    lineinfile:
-      path: /etc/sudoers
-      line: |
-        #give AD admins sudo access
-        %linux-admins@{{ domain }} ALL=(ALL)   ALL
   - name: Restart
     reboot: 
       reboot_timeout: 100
