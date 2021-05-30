@@ -29,7 +29,7 @@ then
   echo "Session:" >> /usr/share/pam-configs/mkhomedir
   echo "        required                        pam_mkhomedir.so umask=0022 skel=/etc/skel" >> /usr/share/pam-configs/mkhomedir
 
-  pam-auth-update
+  pam-auth-update --enable mkhomedir
 
   echo "If you received no warnings restart the computer to complete setup."
   exit 0
