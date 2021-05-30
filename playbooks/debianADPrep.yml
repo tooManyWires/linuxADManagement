@@ -74,7 +74,7 @@
       path: /etc/sudoers
       line: |
         #give AD admins sudo access
-        %linux-admins@home.lab ALL=(ALL)   ALL
+        %linux-admins@{{ domain }} ALL=(ALL)   ALL
   - name: Restart
     reboot: 
       reboot_timeout: 100
