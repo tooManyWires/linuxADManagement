@@ -1,0 +1,43 @@
+---
+- name: update
+  hosts: Kubernetes_Nodes
+  become: yes
+  tasks:
+  - name: update
+    ansible.builtin.package:
+      name: "*"
+      state: latest
+  - name: disable swap
+    command: swapoff -a
+    command: sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+  - name: install dependency packages
+    ansible.builtin.package:
+      name:
+      - ca-certificates
+      - curl
+      - apt-transport-https
+  - name: get gpg key
+    get_url:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
+  - name: add gpg key
+    copy:
+      dest: "/etc/apt/sources.list.d/kubernetes.list"
+      content: deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main
+  - name: apt cache update
+    apt:
+      force_apt_get: True
+      name: "*"
+      state: latest
+      update_cache: yes
+  - name: install kubernetes packages
+    ansible.builtin.package:
+      name:
+      - kubeadm
+      - kubectl
+      - kubelet
+      - containerd
+      state: latest
+  - name: Restart
+    reboot:
+      reboot_timeout: 100

@@ -1,22 +1,10 @@
 ---
-- name: Update-Local
-  hosts: localhost
-  become: yes
-  tasks:
-  - name: update 
-    apt:
-      force_apt_get: True
-      name: "*"
-      state: latest
-      update_cache: yes
-- name: Update-Remote
-  hosts: all
+- name: Update
+  hosts: Servers
+  gather_facts: yes
   become: yes
   tasks:
   - name: update
-    apt:
-      force_apt_get: True
+    ansible.builtin.package:
       name: "*"
       state: latest
-      update_cache: yes
-

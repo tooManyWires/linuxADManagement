@@ -1,0 +1,27 @@
+---
+- name: Linux Machine Prep
+  vars_prompt:
+    - name: "domain"
+      prompt: "What domain will this machine join(if any)?"
+    - name: "user"
+      prompt: "Who is the domain user to join this machine as?"
+    - name: "password"
+      prompt: "Domain users password"
+      private: yes
+  hosts: Setup
+  become: yes
+  tasks:
+  - name: join AD
+    expect:
+      command: /usr/sbin/realm join {{ domain|upper }} -U {{ user }}
+      responses:
+        Password for *: "{{ password }}"
+  - name: Add linux-admins to sudoers
+    lineinfile:
+      path: /etc/sudoers
+      line: |
+        #give AD admins sudo access
+        %<<Your admin group here@your domain >> ALL=(ALL)   ALL
+  - name: Restart
+    reboot:
+      reboot_timeout: 100
